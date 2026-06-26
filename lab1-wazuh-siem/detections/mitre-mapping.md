@@ -121,7 +121,6 @@ Sysmon Event ID **1** detects PowerShell process creation containing suspicious 
 ![PowerShell Alert](../findings/rule-100003-powershell-3.png)
 ![PowerShell Alert](../findings/rule-100003-powershell-4.png)
 ![PowerShell Alert](../findings/rule-100003-powershell-5.png)
-![PowerShell Alert](../findings/rule-100003-powershell-6.png)
 
 
 *Custom Rule **100003** detecting suspicious PowerShell execution with encoded commands, execution policy bypass, hidden windows, and download cradle techniques.*
