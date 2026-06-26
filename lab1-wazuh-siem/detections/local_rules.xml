@@ -1,0 +1,45 @@
+<!-- Local rules -->
+<!-- Copyright (C) 2015, Wazuh Inc. -->
+
+<group name="windows,authentication_failed,">
+
+  <rule id="100001" level="12" frequency="5" timeframe="120">
+    <if_matched_sid>60122</if_matched_sid>
+    <same_source_ip />
+    <description>Brute Force Attack Detected: Multiple failed logons from same source IP (T1110)</description>
+    <mitre>
+      <id>T1110</id>
+    </mitre>
+    <group>authentication_failures,</group>
+  </rule>
+
+</group>
+
+<group name="windows,sysmon,malware,">
+
+  <rule id="100002" level="15">
+    <if_group>sysmon_event_11</if_group>
+    <field name="win.eventdata.targetFilename" type="pcre2">(?i)mimikatz</field>
+    <description>Mimikatz Binary Detected: Credential dumping tool dropped on system (T1003.001)</description>
+    <mitre>
+      <id>T1003.001</id>
+    </mitre>
+    <group>credential_dumping,</group>
+  </rule>
+
+</group>
+
+<group name="windows,sysmon,powershell,">
+
+  <rule id="100003" level="12">
+    <if_group>sysmon_event1</if_group>
+    <field name="win.eventdata.image" type="pcre2">(?i)powershell\.exe</field>
+    <field name="win.eventdata.commandLine" type="pcre2">(?i)(-enc|-encodedcommand|-nop|-noprofile|-windowstyle\s+hidden|downloadstring|iex|invoke-expression|bypass)</field>
+    <description>Suspicious PowerShell Execution Detected: Evasion flags or download cradle observed (T1059.001)</description>
+    <mitre>
+      <id>T1059.001</id>
+    </mitre>
+    <group>powershell_abuse,</group>
+  </rule>
+
+</group>
