@@ -1,0 +1,68 @@
+<!-- Lab 2 — Custom Wazuh Detection Rules -->
+<!-- Atomic Red Team ATT&CK Coverage Testing -->
+<!-- Author: HrishiK1107 -->
+<!-- Date: 2026-06-27 -->
+
+<group name="local,sysmon,">
+
+  <!-- T1053.005 - Scheduled Task Creation -->
+  <rule id="100020" level="12">
+    <if_group>sysmon_event1</if_group>
+    <field name="win.eventdata.commandLine" type="pcre2">(?i)schtasks.*\/create</field>
+    <description>Scheduled Task Created via CLI - Possible Persistence (T1053.005)</description>
+    <mitre>
+      <id>T1053.005</id>
+    </mitre>
+  </rule>
+
+  <!-- T1055 - Process Injection via mavinject/CreateThread -->
+  <rule id="100021" level="13">
+    <if_group>sysmon_event1</if_group>
+    <field name="win.eventdata.commandLine" type="pcre2">(?i)(mavinject|CreateThreadNative|CreateRemoteThread)</field>
+    <description>Possible Process Injection Detected (T1055)</description>
+    <mitre>
+      <id>T1055</id>
+    </mitre>
+  </rule>
+
+  <!-- T1070.004 - File Deletion via cmd del or PowerShell Remove-Item -->
+  <rule id="100022" level="10">
+    <if_group>sysmon_event1</if_group>
+    <field name="win.eventdata.commandLine" type="pcre2">(?i)(cmd.*\/c.*del\s|Remove-Item.*-Force)</field>
+    <description>Indicator Removal - File Deletion Detected (T1070.004)</description>
+    <mitre>
+      <id>T1070.004</id>
+    </mitre>
+  </rule>
+
+  <!-- T1003.001 - LSASS Dump via comsvcs.dll MiniDump -->
+  <rule id="100023" level="15">
+    <if_group>sysmon_event1</if_group>
+    <field name="win.eventdata.commandLine" type="pcre2">(?i)comsvcs.*MiniDump|rundll32.*comsvcs</field>
+    <description>LSASS Memory Dump via comsvcs.dll Detected (T1003.001)</description>
+    <mitre>
+      <id>T1003.001</id>
+    </mitre>
+  </rule>
+
+  <!-- T1105 - Ingress Tool Transfer via PowerShell WebClient -->
+  <rule id="100024" level="12">
+    <if_group>sysmon_event1</if_group>
+    <field name="win.eventdata.commandLine" type="pcre2">(?i)(Net\.WebClient|DownloadFile|DownloadString|IWR|Invoke-WebRequest)</field>
+    <description>Possible Ingress Tool Transfer via PowerShell Download Cradle (T1105)</description>
+    <mitre>
+      <id>T1105</id>
+    </mitre>
+  </rule>
+
+  <!-- T1136.001 - Local Account Creation via net user -->
+  <rule id="100025" level="12">
+    <if_group>sysmon_event1</if_group>
+    <field name="win.eventdata.commandLine" type="pcre2">(?i)net.*user.*\/add|net.*localgroup.*administrators</field>
+    <description>Local Account Created via net user - Possible Persistence (T1136.001)</description>
+    <mitre>
+      <id>T1136.001</id>
+    </mitre>
+  </rule>
+
+</group>
